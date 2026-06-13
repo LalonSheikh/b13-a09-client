@@ -49,11 +49,13 @@ const Navbar = () => {
           </ul>
         </div>
 
-        <Link href="/" className="btn btn-ghost text-xl">
-          {" "}
-          <Bulb className="text-xl text-red-300" />
-          IdeaVolt
-        </Link>
+      
+          <Link href="/" className="flex justify-center items-center text-2xl font-bold text-primary">
+            {" "}
+            <Bulb className="text-2xl text-red-300" />
+            IdeaVolt
+          </Link>
+    
       </div>
 
       <div className="navbar-center hidden lg:flex">
