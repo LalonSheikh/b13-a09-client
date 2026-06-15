@@ -10,8 +10,8 @@ const Navbar = () => {
     <li key="timeline">
       <Link href="/timeline">Ideas</Link>
     </li>,
-    <li key="stats">
-      <Link href="/stats">Add Idea</Link>
+    <li key="add-idea">
+      <Link href="/add-idea">Add Idea</Link>
     </li>,
     <li key="my-ideas">
       <Link href="/my-ideas">My Ideas</Link>
