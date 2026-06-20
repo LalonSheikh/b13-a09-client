@@ -5,45 +5,42 @@ import { useState } from "react";
 const AddIdeaPage = () => {
   const [category, setCategory] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const idea = Object.fromEntries(formData.entries());
 
-    const form = e.target;
+    console.log(idea, "idea");
 
-    const ideaData = {
-      title: form.title.value,
-      shortDescription: form.shortDescription.value,
-      detailedDescription: form.detailedDescription.value,
-      category,
-      tags: form.tags.value,
-      imageURL: form.imageURL.value,
-      estimatedBudget: form.estimatedBudget.value,
-      targetAudience: form.targetAudience.value,
-      problemStatement: form.problemStatement.value,
-      proposedSolution: form.proposedSolution.value,
-    };
+    const res = await fetch("http://localhost:5000/idea", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(idea),
+    });
 
-    console.log(ideaData);
+    const data = await res.json();
+    if(data){
+      alert('idea added successfully')
+    }
+    console.log(data);
   };
 
   return (
-    <div className="min-h-screen bg-base-200 py-12 px-4">
-      <div className="max-w-5xl mx-auto">
+    <div className="min-h-screen mx-auto bg-base-200 py-15 px-4">
+      <div className="max-w-5xl">
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-5xl font-extrabold bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Submit Your Startup Idea
+            Add Idea
           </h1>
-          <p className="mt-4 text-base-content/70 text-lg">
-            Share your innovative startup concept with the community and inspire
-            future entrepreneurs.
-          </p>
         </div>
 
         {/* Form Card */}
         <div className="card bg-base-100 shadow-2xl border border-base-300">
           <div className="card-body p-8 md:p-12">
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-2">
               {/* Idea Title */}
               <div>
                 <label className="label">

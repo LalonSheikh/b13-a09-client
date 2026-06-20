@@ -7,8 +7,8 @@ const Navbar = () => {
     <li key="home">
       <Link href="/">Home</Link>
     </li>,
-    <li key="timeline">
-      <Link href="/timeline">Ideas</Link>
+    <li key="ideas">
+      <Link href="/ideas">Ideas</Link>
     </li>,
     <li key="add-idea">
       <Link href="/add-idea">Add Idea</Link>
@@ -49,13 +49,14 @@ const Navbar = () => {
           </ul>
         </div>
 
-      
-          <Link href="/" className="flex justify-center items-center text-2xl font-bold text-primary">
-            {" "}
-            <Bulb className="text-2xl text-red-300" />
-            IdeaVolt
-          </Link>
-    
+        <Link
+          href="/"
+          className="flex justify-center items-center text-2xl font-bold bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent "
+        >
+          {" "}
+          <Bulb className="text-2xl text-red-300 " />
+          IdeaVolt
+        </Link>
       </div>
 
       <div className="navbar-center hidden lg:flex">
