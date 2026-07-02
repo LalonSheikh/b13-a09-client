@@ -9,7 +9,7 @@ const IdeaPage = async () => {
   return <div> 
      <div className="max-w-7xl mx-auto">
       <h2>Ideas All</h2>
-      <div className="grid grid-cols-4 container mx-auto gap-2">
+      <div className="grid grid-cols-3 container mx-auto gap-2">
         {ideas.map((idea) => (
           <IdeaCard
             key={idea._id}

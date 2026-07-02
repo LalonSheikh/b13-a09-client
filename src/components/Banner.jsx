@@ -50,7 +50,7 @@ const Banner = () => {
           <div className="absolute inset-0 flex items-center">
             <div className="max-w-7xl mx-auto px-6 lg:px-12">
               <div className="max-w-2xl text-white space-y-6">
-                <div className="badge badge-primary badge-lg">
+                <div className="badge bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
                   🚀 Startup Innovation Hub
                 </div>
 
@@ -65,7 +65,7 @@ const Banner = () => {
                 <div className="flex flex-wrap gap-4">
                   <Link
                     href="/ideas"
-                    className="btn btn-primary btn-lg"
+                    className="btn bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent btn-lg"
                   >
                     Explore Ideas
                   </Link>

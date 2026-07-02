@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { FaExternalLinkAlt, FaRegCalendar } from "react-icons/fa";
+import { FaExternalLinkAlt, FaExternalLinkSquareAlt, FaRegCalendar } from "react-icons/fa";
 import { PiMapPinLineBold } from "react-icons/pi";
 
 const IdeaCard = ({ idea }) => {
@@ -32,8 +32,8 @@ const IdeaCard = ({ idea }) => {
       </div>
       <Link href={`/ideas/${_id}`}>
         {" "}
-        <button  className="btn btn-ghost">
-          Book Now <FaExternalLinkAlt />
+        <button  className="btn bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent btn-lg block px-5">
+          View Details <FaExternalLinkSquareAlt className="text-xl " />
         </button>
       </Link>
     </div>

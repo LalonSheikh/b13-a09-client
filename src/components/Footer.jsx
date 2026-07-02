@@ -13,7 +13,7 @@ const Footer = () => {
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           {/* Logo & Description */}
           <div>
-            <h2 className="text-3xl font-bold text-primary">IdeaVault</h2>
+            <h2 className="text-3xl font-bold bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">IdeaVault</h2>
             <p className="mt-4 text-base-content/70 leading-relaxed">
               Discover innovative startup ideas, share your creativity,
               collaborate with others, and turn imagination into reality.
@@ -26,7 +26,7 @@ const Footer = () => {
 
             <ul className="space-y-3 text-base-content/70">
               <li>
-                <Link href="/ideas" className="hover:text-primary transition">
+                <Link href="/ideas" className="hover:bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent transition">
                   Ideas
                 </Link>
               </li>
@@ -34,7 +34,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/categories"
-                  className="hover:text-primary transition"
+                  className="hover:bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent transition"
                 >
                   Categories
                 </Link>
@@ -43,7 +43,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/add-idea"
-                  className="hover:text-primary transition"
+                  className="hover:bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent transition"
                 >
                   Add Idea
                 </Link>
@@ -52,7 +52,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/my-ideas"
-                  className="hover:text-primary transition"
+                  className="hover:bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent transition"
                 >
                   My Ideas
                 </Link>
@@ -61,7 +61,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/my-interactions"
-                  className="hover:text-primary transition"
+                  className="hover:bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent transition"
                 >
                   My Interactions
                 </Link>

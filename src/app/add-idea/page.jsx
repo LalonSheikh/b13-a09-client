@@ -12,7 +12,7 @@ const AddIdeaPage = () => {
 
     console.log(idea, "idea");
 
-    const res = await fetch("http://localhost:5000/idea", {
+    const res = await fetch("http://localhost:5000/ideas", {
       method: "POST",
       headers: {
         "content-type": "application/json",
