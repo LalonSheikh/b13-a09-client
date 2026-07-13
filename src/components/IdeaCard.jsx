@@ -32,8 +32,8 @@ const IdeaCard = ({ idea }) => {
       </div>
       <Link href={`/ideas/${_id}`}>
         {" "}
-        <button  className="btn bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent btn-lg block px-5">
-          View Details <FaExternalLinkSquareAlt className="text-xl " />
+        <button  className="btn bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent btn-lg block">
+          View Details
         </button>
       </Link>
     </div>

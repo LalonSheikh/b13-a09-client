@@ -3,9 +3,8 @@ import IdeaCard from "@/components/IdeaCard";
 import React from "react";
 
 const HomePage = async () => {
-  const res = await fetch("http://localhost:5000/ideas");
-  const ideas1 = await res.json();
-  const ideas = ideas1.slice(0, 6);
+  const res = await fetch("http://localhost:5000/ideas?limit=6");
+const ideas = await res.json();
   return (
     <div>
       <Banner />
