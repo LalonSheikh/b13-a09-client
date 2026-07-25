@@ -41,6 +41,7 @@
 
 import Image from "next/image";
 import React from "react";
+import Comments from "./Comments";
 
 const IdeasDetailsPage = async ({ params }) => {
   const { id } = await params;
@@ -49,32 +50,41 @@ const IdeasDetailsPage = async ({ params }) => {
   const idea = await res.json();
 
   const {
-  title,
-  shortDescription,
-  estimatedBudget,
-  imageURL,
-  category,
-  postedBy,
-  postedDate,
-  tags,
-  targetAudience,
-  problemStatement,
-  proposedSolution,
-} = idea;
+    title,
+    shortDescription,
+    estimatedBudget,
+    imageURL,
+    category,
+    postedBy,
+    postedDate,
+    tags,
+    targetAudience,
+    problemStatement,
+    proposedSolution,
+  } = idea;
 
-// Normalize tags into an array regardless of what the API returns
-const tagList = Array.isArray(tags)
-  ? tags
-  : typeof tags === "string"
-  ? tags.split(",").map((t) => t.trim()).filter(Boolean)
-  : [];
+  // Normalize tags into an array regardless of what the API returns
+  const tagList = Array.isArray(tags)
+    ? tags
+    : typeof tags === "string"
+      ? tags
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean)
+      : [];
 
   return (
     <div className="max-w-7xl mx-auto py-8 px-4">
       <div className="rounded-xl overflow-hidden shadow-sm border border-gray-100">
         {/* Cover Image */}
         <div className="relative w-full h-64">
-          <Image alt={title} src={imageURL} fill className="object-cover" />
+          <Image
+            alt={title}
+            src={imageURL}
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
         </div>
 
         <div className="p-6">
@@ -139,18 +149,9 @@ const tagList = Array.isArray(tags)
         </div>
       </div>
 
+     
       {/* Comments section */}
-      <div className="mt-8">
-        <h2 className="text-lg font-semibold mb-4">Comments (0)</h2>
-        <textarea
-          placeholder="Add your comment..."
-          rows={3}
-          className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none"
-        />
-        <button className="mt-3 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
-          Post Comment
-        </button>
-      </div>
+      <Comments ideaId={id} />
     </div>
   );
 };

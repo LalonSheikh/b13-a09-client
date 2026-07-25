@@ -20,10 +20,7 @@ const IdeaCard = ({ idea }) => {
           <div>
             <h2 className="text-xl font-black">{title}</h2>
           </div>
-          <div className="flex items-center gap-2">
-            <FaRegCalendar />
-            {estimatedBudget}
-          </div>
+        
         </div>
         <div>
           {" "}
