@@ -13,8 +13,8 @@ const Navbar = () => {
     <li key="add-idea">
       <Link href="/add-idea">Add Idea</Link>
     </li>,
-    <li key="my-ideas">
-      <Link href="/my-ideas">My Ideas</Link>
+    <li key="my-idea">
+      <Link href="/my-idea">My Ideas</Link>
     </li>,
     <li key="my-interactions">
       <Link href="/my-interactions">My Interactions</Link>
