@@ -64,23 +64,42 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-end">
+          <Link href="/signup">
+                <button className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">
+                  Register
+                </button>
+              </Link>
         <div className="dropdown dropdown-end">
           <div
             tabIndex={0}
             role="button"
-            className="btn btn-ghost btn-circle avatar"
+            // className="btn btn-ghost btn-circle avatar"
+            className="btn btn-ghost  avatar"
           >
-            <div className="w-10 rounded-full">
-              <div className="w-10 rounded-full">
-                <Image
+            <div className="flex items-center gap-3">
+            
+              <Link href="/signin">
+                <button className="px-4 py-2 rounded-md hover:bg-gray-100">
+                  Login
+                </button>
+              </Link>
+
+            </div>
+            {/* <ul className="flex gap-3">
+              <li>
+                <Link href="/signin">Login</Link>
+              </li>{" "}
+              <li>
+                <Link href="/signup">Register</Link>
+              </li>
+            </ul> */}
+            {/* <Image
                   src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
                   alt="User Avatar"
                   width={40}
                   height={40}
                   className="rounded-full"
-                />
-              </div>
-            </div>
+                /> */}
           </div>
 
           <ul
@@ -93,6 +112,7 @@ const Navbar = () => {
             <li>
               <Link href="/settings">Settings</Link>
             </li>
+
             <li>
               <a>Logout</a>
             </li>
