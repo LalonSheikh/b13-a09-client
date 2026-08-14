@@ -85,7 +85,7 @@ export default function Comments({ ideaId }) {
 
   return (
     <div className="mt-10 bg-white rounded-xl shadow border p-6">
-      <h2 className="text-2xl font-bold mb-6">
+      <h2 className="text-2xl font-bold bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent mb-6">
         Comments ({comments.length})
       </h2>
 
@@ -101,7 +101,7 @@ export default function Comments({ ideaId }) {
       <div className="mt-4 flex gap-3">
         <button
           onClick={handleSubmit}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg transition"
+          className=" hover:bg-indigo-700 px-5 py-2 rounded-lg transition font-bold bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent"
         >
           {editingId ? "Update Comment" : "Post Comment"}
         </button>

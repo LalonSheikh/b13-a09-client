@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 
+
 const jost = Jost({
   subsets: ["latin"],
 });
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
         <Navbar />
 
         {children}
+        
         <Footer></Footer>
       </body>
     </html>
