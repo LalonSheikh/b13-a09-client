@@ -18,21 +18,39 @@ const Navbar = () => {
 
   const user = session?.user;
 
-  console.log("SESSION:", session);
-  console.log("USER:", user);
-
-
-  
-
-
-
+  // =========================
+  // LOGOUT
+  // =========================
   const handleSignOut = async () => {
-    await authClient.signOut();
+    const { error } = await authClient.signOut();
+
+    if (error) {
+      console.error("Logout error:", error);
+      return;
+    }
 
     window.location.href = "/";
   };
 
-  const links = [
+  // =========================
+  // PUBLIC LINKS
+  // Visible when NOT logged in
+  // =========================
+  const publicLinks = [
+    <li key="home">
+      <Link href="/">Home</Link>
+    </li>,
+
+    <li key="ideas">
+      <Link href="/ideas">Ideas</Link>
+    </li>,
+  ];
+
+  // =========================
+  // PRIVATE LINKS
+  // Visible after login
+  // =========================
+  const privateLinks = [
     <li key="home">
       <Link href="/">Home</Link>
     </li>,
@@ -56,12 +74,16 @@ const Navbar = () => {
     </li>,
   ];
 
-  return (
-    <div className="navbar bg-base-100 shadow-sm px-4">
+  // Select links according to authentication
+  const links = user ? privateLinks : publicLinks;
 
-      {/* LEFT */}
+  return (
+    <div className="navbar bg-base-100 px-4 shadow-sm">
+
+      {/* ================= LEFT ================= */}
       <div className="navbar-start">
 
+        {/* Mobile Menu */}
         <div className="dropdown">
           <div
             tabIndex={0}
@@ -73,12 +95,13 @@ const Navbar = () => {
 
           <ul
             tabIndex={-1}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content z-50 mt-3 w-52 rounded-box bg-base-100 p-2 shadow-xl"
           >
             {links}
           </ul>
         </div>
 
+        {/* Logo */}
         <Link
           href="/"
           className="flex items-center gap-2 text-2xl font-bold"
@@ -93,31 +116,37 @@ const Navbar = () => {
         </Link>
       </div>
 
-      {/* CENTER */}
+      {/* ================= CENTER ================= */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           {links}
         </ul>
       </div>
 
-      {/* RIGHT */}
+      {/* ================= RIGHT ================= */}
       <div className="navbar-end">
 
         {/* Loading */}
         {isPending ? (
           <span className="loading loading-spinner loading-sm" />
+        ) : error ? (
+          <div className="text-sm text-red-500">
+            Authentication error
+          </div>
         ) : user ? (
 
-          /* ================= LOGGED IN ================= */
+          /* =================================
+             LOGGED IN USER
+          ================================= */
           <div className="dropdown dropdown-end">
 
-            {/* Avatar */}
+            {/* User Avatar + Name */}
             <div
               tabIndex={0}
               role="button"
-              className="flex cursor-pointer items-center gap-3 rounded-full p-1 hover:bg-base-200"
+              className="flex cursor-pointer items-center gap-3 rounded-full p-1 transition hover:bg-base-200"
             >
-
+              {/* Avatar */}
               {user.image ? (
                 <Image
                   src={user.image}
@@ -127,33 +156,37 @@ const Navbar = () => {
                   className="h-11 w-11 rounded-full object-cover ring-2 ring-purple-500"
                 />
               ) : (
-                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-pink-500 text-white">
-                  <FaUser />
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-pink-500 font-bold text-white">
+                  {user.name
+                    ? user.name.charAt(0).toUpperCase()
+                    : "U"}
                 </div>
               )}
 
+              {/* Name + Email */}
               <div className="hidden sm:block">
-                <p className="text-sm font-bold">
-                  {user.name}
+                <p className="max-w-[150px] truncate text-sm font-bold">
+                  {user.name || "User"}
                 </p>
 
                 <p className="max-w-[180px] truncate text-xs text-gray-500">
                   {user.email}
                 </p>
               </div>
-
             </div>
 
-            {/* PROFILE DROPDOWN */}
+            {/* ================= DROPDOWN ================= */}
             <ul
               tabIndex={-1}
-              className="menu dropdown-content bg-base-100 rounded-box z-50 mt-3 w-64 p-3 shadow-xl"
+              className="menu dropdown-content z-50 mt-3 w-64 rounded-box bg-base-100 p-3 shadow-xl"
             >
 
-              {/* User info */}
+              {/* User Information */}
               <li className="mb-2">
-                <div className="flex items-center gap-3 border-b pb-3 hover:bg-transparent">
 
+                <div className="flex items-center gap-3 border-b border-base-200 pb-3 hover:bg-transparent">
+
+                  {/* Avatar */}
                   {user.image ? (
                     <Image
                       src={user.image}
@@ -163,14 +196,17 @@ const Navbar = () => {
                       className="h-12 w-12 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-pink-500 text-white">
-                      <FaUser />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-pink-500 font-bold text-white">
+                      {user.name
+                        ? user.name.charAt(0).toUpperCase()
+                        : "U"}
                     </div>
                   )}
 
+                  {/* Name / Email */}
                   <div className="min-w-0">
-                    <p className="truncate font-bold">
-                      {user.name}
+                    <p className="truncate font-bold text-slate-800">
+                      {user.name || "User"}
                     </p>
 
                     <p className="truncate text-xs text-gray-500">
@@ -183,17 +219,9 @@ const Navbar = () => {
 
               {/* Profile */}
               <li>
-                <Link href="/profile">
+                <Link href="/profile-page">
                   <FaUser />
                   Profile
-                </Link>
-              </li>
-
-              {/* My Ideas */}
-              <li>
-                <Link href="/my-idea">
-                  <FaLightbulb />
-                  My Ideas
                 </Link>
               </li>
 
@@ -213,17 +241,21 @@ const Navbar = () => {
 
         ) : (
 
-          /* ================= NOT LOGGED IN ================= */
+          /* =================================
+             NOT LOGGED IN
+          ================================= */
           <div className="flex items-center gap-2">
 
+            {/* Login */}
             <Link href="/login">
-              <button className="rounded-lg px-4 py-2 font-semibold hover:bg-purple-50 hover:text-purple-600">
+              <button className="rounded-lg px-4 py-2 font-semibold transition hover:bg-purple-50 hover:text-purple-600">
                 Login
               </button>
             </Link>
 
+            {/* Register */}
             <Link href="/signup">
-              <button className="rounded-lg bg-gradient-to-r from-purple-600 to-pink-500 px-5 py-2 font-semibold text-white">
+              <button className="rounded-lg bg-gradient-to-r from-purple-600 to-pink-500 px-5 py-2 font-semibold text-white transition hover:from-purple-700 hover:to-pink-600">
                 Register
               </button>
             </Link>

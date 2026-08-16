@@ -1,52 +1,20 @@
-// import Image from "next/image";
-// import React from "react";
-// import { FaRegCalendar } from "react-icons/fa";
-// import { PiMapPinLineBold } from "react-icons/pi";
-
-// const IdeasDetailsPage = async ({ params }) => {
-//   const { id } = await params;
-
-//   const res = await fetch(`http://localhost:5000/ideas/${id}`);
-//   const idea = await res.json();
-//   const { title, shortDescription, estimatedBudget, imageURL, category } = idea;
-
-//   console.log(idea);
-
-//   return (
-//     <div className="max-w-7xl mx-auto">
-//       <Image alt={title} src={imageURL} height={500} width={800}></Image>
-//        <h2>{shortDescription}</h2>
-//             <div className="flex justify-between items-center ">
-//               <div>
-//                 <div className="flex items-center gap-2">
-//                   <PiMapPinLineBold /> <span>{category}</span>
-//                 </div>
-//                 <div>
-//                   <h2 className="text-xl font-black">{title}</h2>
-//                 </div>
-//                 <div className="flex items-center gap-2">
-//                   <FaRegCalendar />
-//                   {estimatedBudget}
-//                 </div>
-//               </div>
-//               <div>
-//                 {" "}
-//                 <span className="text-xl font-bold">${estimatedBudget}</span> /person
-//               </div> </div>
-//     </div>
-//   );
-// };
-
-// export default IdeasDetailsPage;
-
 import Image from "next/image";
-import React from "react";
 import Comments from "./Comments";
 
 const IdeasDetailsPage = async ({ params }) => {
   const { id } = await params;
 
-  const res = await fetch(`http://localhost:5000/ideas/${id}`);
+  const res = await fetch(
+    `http://localhost:5000/ideas/${id}`,
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch idea");
+  }
+
   const idea = await res.json();
 
   const {
@@ -63,7 +31,6 @@ const IdeasDetailsPage = async ({ params }) => {
     proposedSolution,
   } = idea;
 
-  // Normalize tags into an array regardless of what the API returns
   const tagList = Array.isArray(tags)
     ? tags
     : typeof tags === "string"
@@ -74,10 +41,13 @@ const IdeasDetailsPage = async ({ params }) => {
       : [];
 
   return (
-    <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="rounded-xl overflow-hidden shadow-sm border border-gray-100">
-        {/* Cover Image */}
-        <div className="relative w-full h-64">
+    <div className="mx-auto max-w-7xl px-4 py-8">
+
+      {/* IDEA CARD */}
+      <div className="overflow-hidden rounded-xl border border-gray-100 shadow-sm">
+
+        {/* Image */}
+        <div className="relative h-64 w-full">
           <Image
             alt={title}
             src={imageURL}
@@ -88,33 +58,51 @@ const IdeasDetailsPage = async ({ params }) => {
         </div>
 
         <div className="p-6">
-          {/* Category badge */}
-          <span className="inline-block bg-purple-100 text-purple-700 text-xs font-medium px-3 py-1 rounded-full mb-3">
+
+          {/* Category */}
+          <span className="mb-3 inline-block rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-700">
             {category}
           </span>
 
           {/* Title */}
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">{title}</h1>
+          <h1 className="mb-2 text-2xl font-bold text-gray-900">
+            {title}
+          </h1>
 
-          {/* Author + Date */}
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-6 h-6 rounded-full bg-gray-800 text-white text-xs flex items-center justify-center font-semibold">
-              {postedBy?.slice(0, 2).toUpperCase() || "UN"}
+          {/* Author */}
+          <div className="mb-4 flex items-center gap-2">
+
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-pink-500 text-xs font-bold text-white">
+              {(postedBy || "User")
+                .substring(0, 2)
+                .toUpperCase()}
             </div>
-            <span className="text-sm text-gray-500">{postedDate}</span>
+
+            <div>
+              <p className="text-sm font-semibold text-gray-800">
+                {postedBy || "Unknown User"}
+              </p>
+
+              {postedDate && (
+                <p className="text-xs text-gray-500">
+                  {new Date(postedDate).toLocaleDateString()}
+                </p>
+              )}
+            </div>
+
           </div>
 
           {/* Description */}
-          <p className="text-gray-700 leading-relaxed mb-4">
+          <p className="mb-4 leading-relaxed text-gray-700">
             {shortDescription}
           </p>
 
           {/* Tags */}
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="mb-6 flex flex-wrap gap-2">
             {tagList.map((tag) => (
               <span
                 key={tag}
-                className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full"
+                className="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-600"
               >
                 {tag}
               </span>
@@ -123,35 +111,59 @@ const IdeasDetailsPage = async ({ params }) => {
 
           <hr className="mb-6" />
 
-          {/* Details grid */}
-          <div className="grid grid-cols-2 gap-6 mb-6">
+          {/* Details */}
+          <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+
             <div>
-              <h3 className="text-sm text-gray-500 mb-1">Target Audience</h3>
-              <p className="font-semibold text-gray-900">{targetAudience}</p>
-            </div>
-            <div>
-              <h3 className="text-sm text-gray-500 mb-1">Budget</h3>
+              <h3 className="mb-1 text-sm text-gray-500">
+                Target Audience
+              </h3>
+
               <p className="font-semibold text-gray-900">
-                ${estimatedBudget?.toLocaleString()}
+                {targetAudience}
               </p>
             </div>
+
+            <div>
+              <h3 className="mb-1 text-sm text-gray-500">
+                Budget
+              </h3>
+
+              <p className="font-semibold text-gray-900">
+                ${Number(estimatedBudget || 0).toLocaleString()}
+              </p>
+            </div>
+
           </div>
 
+          {/* Problem */}
           <div className="mb-6">
-            <h3 className="text-sm text-gray-500 mb-1">Problem Statement</h3>
-            <p className="text-gray-800">{problemStatement}</p>
+            <h3 className="mb-1 text-sm text-gray-500">
+              Problem Statement
+            </h3>
+
+            <p className="text-gray-800">
+              {problemStatement}
+            </p>
           </div>
 
+          {/* Solution */}
           <div>
-            <h3 className="text-sm text-gray-500 mb-1">Proposed Solution</h3>
-            <p className="text-gray-800">{proposedSolution}</p>
+            <h3 className="mb-1 text-sm text-gray-500">
+              Proposed Solution
+            </h3>
+
+            <p className="text-gray-800">
+              {proposedSolution}
+            </p>
           </div>
+
         </div>
       </div>
 
-     
-      {/* Comments section */}
+      {/* COMMENTS */}
       <Comments ideaId={id} />
+
     </div>
   );
 };

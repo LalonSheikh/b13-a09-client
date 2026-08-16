@@ -30,7 +30,7 @@ export default function LoginPage() {
   // =========================
   // GOOGLE LOGIN
   // =========================
-  const handleGoogleLogin = async () => {
+  const handleGoogleSignIn = async () => {
     try {
       await authClient.signIn.social({
         provider: "google",
@@ -40,6 +40,12 @@ export default function LoginPage() {
       console.error("Google login error:", error);
     }
   };
+
+  //  const handleGoogleSignIn = async()=>{
+  //     await authClient.signIn.social({
+  //       provider:"google",
+  //     })
+  //   }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
@@ -91,7 +97,7 @@ export default function LoginPage() {
             {/* ================= GOOGLE LOGIN ================= */}
             <button
               type="button"
-              onClick={handleGoogleLogin}
+              onClick={handleGoogleSignIn}
               className="mt-8 flex w-full items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white px-5 py-3.5 font-semibold text-slate-700 transition duration-200 hover:border-purple-400 hover:bg-purple-50 hover:text-purple-700"
             >
               <FaGoogle className="text-lg text-red-500" />
