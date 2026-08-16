@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const Banner = () => {
   const slides = [
@@ -28,79 +31,113 @@ const Banner = () => {
     },
   ];
 
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Automatically change slide every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [slides.length]);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const previousSlide = () => {
+    setCurrentSlide(
+      (prev) => (prev - 1 + slides.length) % slides.length
+    );
+  };
+
+  const slide = slides[currentSlide];
+
   return (
-    <div className="carousel w-full rounded-3xl overflow-hidden shadow-2xl">
-      {slides.map((slide, index) => (
-        <div
-          key={slide.id}
-          id={`slide${slide.id}`}
-          className="carousel-item relative w-full"
-        >
-          {/* Background Image */}
-          <img
-            src={slide.image}
-            alt={slide.title}
-            className="w-full h-[500px] md:h-[650px] object-cover"
-          />
+    <div className="relative w-full overflow-hidden rounded-3xl shadow-2xl">
+      {/* ================= IMAGE ================= */}
+      <img
+        src={slide.image}
+        alt={slide.title}
+        className="h-[500px] w-full object-cover transition-all duration-700 md:h-[650px]"
+      />
 
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/20"></div>
+      {/* ================= OVERLAY ================= */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/20"></div>
 
-          {/* Content */}
-          <div className="absolute inset-0 flex items-center">
-            <div className="max-w-7xl mx-auto px-6 lg:px-12">
-              <div className="max-w-2xl text-white space-y-6">
-                <div className="badge bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
-                  🚀 Startup Innovation Hub
-                </div>
+      {/* ================= CONTENT ================= */}
+      <div className="absolute inset-0 flex items-center">
+        <div className="mx-auto w-full max-w-7xl px-6 lg:px-12">
+          <div className="max-w-2xl space-y-6 text-white">
 
-                <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
-                  {slide.title}
-                </h1>
+            {/* Badge */}
+            <div className="inline-block rounded-full bg-white/10 px-4 py-2 text-sm font-semibold backdrop-blur-sm">
+              🚀 Startup Innovation Hub
+            </div>
 
-                <p className="text-lg md:text-xl text-gray-200">
-                  {slide.description}
-                </p>
+            {/* Title */}
+            <h1 className="text-4xl font-extrabold leading-tight md:text-6xl">
+              {slide.title}
+            </h1>
 
-                <div className="flex flex-wrap gap-4">
-                  <Link
-                    href="/ideas"
-                    className="btn bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent btn-lg"
-                  >
-                    Explore Ideas
-                  </Link>
+            {/* Description */}
+            <p className="text-lg text-gray-200 md:text-xl">
+              {slide.description}
+            </p>
 
-                  <Link
-                    href="/add-idea"
-                    className="btn btn-outline btn-lg text-white border-white hover:border-primary"
-                  >
-                    Share Your Idea
-                  </Link>
-                </div>
-              </div>
+            {/* Buttons */}
+            <div className="flex flex-wrap gap-4">
+
+              <Link
+                href="/ideas"
+                className="btn btn-lg border-none bg-gradient-to-r from-primary to-secondary text-white"
+              >
+                Explore Ideas
+              </Link>
+
+              <Link
+                href="/add-idea"
+                className="btn btn-outline btn-lg border-white text-white hover:border-primary hover:bg-primary"
+              >
+                Share Your Idea
+              </Link>
+
             </div>
           </div>
-
-          {/* Navigation */}
-          <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-            <a
-              href={`#slide${index === 0 ? slides.length : index}`}
-              className="btn btn-circle btn-outline text-white"
-            >
-              ❮
-            </a>
-
-            <a
-              href={`#slide${
-                index === slides.length - 1 ? 1 : index + 2
-              }`}
-              className="btn btn-circle btn-outline text-white"
-            >
-              ❯
-            </a>
-          </div>
         </div>
-      ))}
+      </div>
+
+      {/* ================= PREVIOUS BUTTON ================= */}
+      <button
+        onClick={previousSlide}
+        className="absolute left-5 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/50 bg-black/30 text-xl text-white backdrop-blur-sm transition hover:bg-black/60"
+      >
+        ❮
+      </button>
+
+      {/* ================= NEXT BUTTON ================= */}
+      <button
+        onClick={nextSlide}
+        className="absolute right-5 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/50 bg-black/30 text-xl text-white backdrop-blur-sm transition hover:bg-black/60"
+      >
+        ❯
+      </button>
+
+      {/* ================= DOTS ================= */}
+      <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-2">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentSlide(index)}
+            className={`h-3 rounded-full transition-all ${
+              currentSlide === index
+                ? "w-8 bg-white"
+                : "w-3 bg-white/50"
+            }`}
+          ></button>
+        ))}
+      </div>
     </div>
   );
 };

@@ -1,90 +1,124 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+
 import {
   FaLightbulb,
   FaUser,
   FaSignOutAlt,
+  FaMoon,
+  FaSun,
 } from "react-icons/fa";
+
 import { authClient } from "@/lib/auth-client";
+import { useTheme } from "@/components/ThemeProvider";
 
 const Navbar = () => {
+  // =========================
+  // THEME
+  // =========================
+const { theme, toggleTheme } = useTheme();
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // =========================
+  // AUTH
+  // =========================
   const {
     data: session,
     isPending,
-    error,
   } = authClient.useSession();
 
   const user = session?.user;
 
   // =========================
+  // THEME TOGGLE
+  // =========================
+  const handleThemeToggle = () => {
+    if (!mounted) return;
+
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
+  // =========================
   // LOGOUT
   // =========================
   const handleSignOut = async () => {
-    const { error } = await authClient.signOut();
+    try {
+      const { error } = await authClient.signOut();
 
-    if (error) {
+      if (error) {
+        console.error("Logout error:", error);
+        return;
+      }
+
+      window.location.href = "/";
+    } catch (error) {
       console.error("Logout error:", error);
-      return;
     }
-
-    window.location.href = "/";
   };
 
   // =========================
   // PUBLIC LINKS
-  // Visible when NOT logged in
   // =========================
-  const publicLinks = [
-    <li key="home">
-      <Link href="/">Home</Link>
-    </li>,
+  const publicLinks = (
+    <>
+      <li>
+        <Link href="/">Home</Link>
+      </li>
 
-    <li key="ideas">
-      <Link href="/ideas">Ideas</Link>
-    </li>,
-  ];
+      <li>
+        <Link href="/ideas">Ideas</Link>
+      </li>
+    </>
+  );
 
   // =========================
   // PRIVATE LINKS
-  // Visible after login
   // =========================
-  const privateLinks = [
-    <li key="home">
-      <Link href="/">Home</Link>
-    </li>,
+  const privateLinks = (
+    <>
+      <li>
+        <Link href="/">Home</Link>
+      </li>
 
-    <li key="ideas">
-      <Link href="/ideas">Ideas</Link>
-    </li>,
+      <li>
+        <Link href="/ideas">Ideas</Link>
+      </li>
 
-    <li key="add-idea">
-      <Link href="/add-idea">Add Idea</Link>
-    </li>,
+      <li>
+        <Link href="/add-idea">Add Idea</Link>
+      </li>
 
-    <li key="my-idea">
-      <Link href="/my-idea">My Ideas</Link>
-    </li>,
+      <li>
+        <Link href="/my-idea">My Ideas</Link>
+      </li>
 
-    <li key="my-interactions">
-      <Link href="/my-interactions">
-        My Interactions
-      </Link>
-    </li>,
-  ];
-
-  // Select links according to authentication
-  const links = user ? privateLinks : publicLinks;
+      <li>
+        <Link href="/my-interactions">
+          My Interactions
+        </Link>
+      </li>
+    </>
+  );
 
   return (
-    <div className="navbar bg-base-100 px-4 shadow-sm">
+    <div className="navbar sticky top-0 z-50 border-b border-base-300 bg-base-100 px-4 shadow-sm">
 
-      {/* ================= LEFT ================= */}
+      {/* =====================================================
+          LEFT SECTION
+      ===================================================== */}
       <div className="navbar-start">
 
-        {/* Mobile Menu */}
+        {/* ================= MOBILE MENU ================= */}
         <div className="dropdown">
+
           <div
             tabIndex={0}
             role="button"
@@ -95,59 +129,96 @@ const Navbar = () => {
 
           <ul
             tabIndex={-1}
-            className="menu menu-sm dropdown-content z-50 mt-3 w-52 rounded-box bg-base-100 p-2 shadow-xl"
+            className="menu menu-sm dropdown-content z-50 mt-3 w-56 rounded-box border border-base-300 bg-base-100 p-2 shadow-xl"
           >
-            {links}
+            {user ? privateLinks : publicLinks}
           </ul>
+
         </div>
 
-        {/* Logo */}
+        {/* ================= LOGO ================= */}
         <Link
           href="/"
           className="flex items-center gap-2 text-2xl font-bold"
         >
-          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 to-pink-500 text-white">
+
+          {/* Logo Icon */}
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 to-pink-500 text-white shadow-md">
             <FaLightbulb />
           </span>
 
+          {/* Logo Text */}
           <span className="bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
             IdeaVolt
           </span>
+
         </Link>
+
       </div>
 
-      {/* ================= CENTER ================= */}
+      {/* =====================================================
+          CENTER SECTION
+      ===================================================== */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          {links}
+
+        <ul className="menu menu-horizontal gap-1 px-1 font-medium">
+
+          {user ? privateLinks : publicLinks}
+
         </ul>
+
       </div>
 
-      {/* ================= RIGHT ================= */}
-      <div className="navbar-end">
+      {/* =====================================================
+          RIGHT SECTION
+      ===================================================== */}
+      <div className="navbar-end gap-2">
 
-        {/* Loading */}
+        {/* ===================================================
+            THEME TOGGLE
+        =================================================== */}
+        <button
+  type="button"
+  onClick={toggleTheme}
+  className="btn btn-ghost btn-circle"
+  aria-label="Toggle theme"
+  title={
+    theme === "dark"
+      ? "Switch to light mode"
+      : "Switch to dark mode"
+  }
+>
+  {theme === "dark" ? (
+    <FaSun className="text-xl text-yellow-400" />
+  ) : (
+    <FaMoon className="text-xl" />
+  )}
+</button>
+
+        {/* ===================================================
+            AUTH LOADING
+        =================================================== */}
         {isPending ? (
+
           <span className="loading loading-spinner loading-sm" />
-        ) : error ? (
-          <div className="text-sm text-red-500">
-            Authentication error
-          </div>
+
         ) : user ? (
 
-          /* =================================
+          /* =================================================
              LOGGED IN USER
-          ================================= */
+          ================================================= */
           <div className="dropdown dropdown-end">
 
-            {/* User Avatar + Name */}
+            {/* ================= USER BUTTON ================= */}
             <div
               tabIndex={0}
               role="button"
               className="flex cursor-pointer items-center gap-3 rounded-full p-1 transition hover:bg-base-200"
             >
+
               {/* Avatar */}
               {user.image ? (
+
                 <Image
                   src={user.image}
                   alt={user.name || "User"}
@@ -155,69 +226,84 @@ const Navbar = () => {
                   height={44}
                   className="h-11 w-11 rounded-full object-cover ring-2 ring-purple-500"
                 />
+
               ) : (
+
                 <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-pink-500 font-bold text-white">
                   {user.name
                     ? user.name.charAt(0).toUpperCase()
                     : "U"}
                 </div>
+
               )}
 
               {/* Name + Email */}
               <div className="hidden sm:block">
+
                 <p className="max-w-[150px] truncate text-sm font-bold">
                   {user.name || "User"}
                 </p>
 
-                <p className="max-w-[180px] truncate text-xs text-gray-500">
+                <p className="max-w-[180px] truncate text-xs text-base-content/60">
                   {user.email}
                 </p>
+
               </div>
+
             </div>
 
-            {/* ================= DROPDOWN ================= */}
+            {/* =================================================
+                USER DROPDOWN
+            ================================================= */}
             <ul
               tabIndex={-1}
-              className="menu dropdown-content z-50 mt-3 w-64 rounded-box bg-base-100 p-3 shadow-xl"
+              className="menu dropdown-content z-50 mt-3 w-64 rounded-box border border-base-300 bg-base-100 p-3 shadow-xl"
             >
 
-              {/* User Information */}
+              {/* ================= USER INFO ================= */}
               <li className="mb-2">
 
-                <div className="flex items-center gap-3 border-b border-base-200 pb-3 hover:bg-transparent">
+                <div className="flex items-center gap-3 border-b border-base-300 pb-3 hover:bg-transparent">
 
                   {/* Avatar */}
                   {user.image ? (
+
                     <Image
                       src={user.image}
                       alt={user.name || "User"}
                       width={50}
                       height={50}
-                      className="h-12 w-12 rounded-full object-cover"
+                      className="h-12 w-12 rounded-full object-cover ring-2 ring-purple-500"
                     />
+
                   ) : (
+
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-pink-500 font-bold text-white">
                       {user.name
                         ? user.name.charAt(0).toUpperCase()
                         : "U"}
                     </div>
+
                   )}
 
                   {/* Name / Email */}
                   <div className="min-w-0">
-                    <p className="truncate font-bold text-slate-800">
+
+                    <p className="truncate font-bold">
                       {user.name || "User"}
                     </p>
 
-                    <p className="truncate text-xs text-gray-500">
+                    <p className="truncate text-xs text-base-content/60">
                       {user.email}
                     </p>
+
                   </div>
 
                 </div>
+
               </li>
 
-              {/* Profile */}
+              {/* ================= PROFILE ================= */}
               <li>
                 <Link href="/profile-page">
                   <FaUser />
@@ -225,11 +311,11 @@ const Navbar = () => {
                 </Link>
               </li>
 
-              {/* Logout */}
+              {/* ================= LOGOUT ================= */}
               <li>
                 <button
                   onClick={handleSignOut}
-                  className="text-red-500 hover:bg-red-50"
+                  className="text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
                 >
                   <FaSignOutAlt />
                   Logout
@@ -237,33 +323,40 @@ const Navbar = () => {
               </li>
 
             </ul>
+
           </div>
 
         ) : (
 
-          /* =================================
-             NOT LOGGED IN
-          ================================= */
+          /* =================================================
+             LOGGED OUT
+          ================================================= */
           <div className="flex items-center gap-2">
 
-            {/* Login */}
+            {/* ================= LOGIN ================= */}
             <Link href="/login">
-              <button className="rounded-lg px-4 py-2 font-semibold transition hover:bg-purple-50 hover:text-purple-600">
+
+              <span className="inline-block rounded-lg px-4 py-2 font-semibold transition hover:bg-purple-50 hover:text-purple-600 dark:hover:bg-purple-950">
                 Login
-              </button>
+              </span>
+
             </Link>
 
-            {/* Register */}
+            {/* ================= REGISTER ================= */}
             <Link href="/signup">
-              <button className="rounded-lg bg-gradient-to-r from-purple-600 to-pink-500 px-5 py-2 font-semibold text-white transition hover:from-purple-700 hover:to-pink-600">
+
+              <span className="inline-block rounded-lg bg-gradient-to-r from-purple-600 to-pink-500 px-5 py-2 font-semibold text-white shadow-md transition hover:from-purple-700 hover:to-pink-600 hover:shadow-lg">
                 Register
-              </button>
+              </span>
+
             </Link>
 
           </div>
+
         )}
 
       </div>
+
     </div>
   );
 };
