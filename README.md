@@ -1,5 +1,6 @@
+A Well Design IDEA VOLT site
 live project link: https://b13-a09-client-three.vercel.app
-Here are 6 README bullet points for your IdeaVolt site:
+Here are 6 README bullet points for this IdeaVolt site:
 
 💡 Share Startup Ideas — Users can create and publish innovative startup ideas with descriptions, categories, tags, budgets, and target audiences.
 🔍 Explore & Discover Ideas — Browse, search, and filter ideas by category, keywords, and other relevant information.
