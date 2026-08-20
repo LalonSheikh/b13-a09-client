@@ -1,4 +1,4 @@
-A Well Design IDEA VOLT site
+A Well Design IDEA VOLT site & 
 live project link: https://b13-a09-client-three.vercel.app
 Here are 6 README bullet points for this IdeaVolt site:
 
